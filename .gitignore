@@ -36,3 +36,7 @@ build/
 ### VS Code ###
 .vscode/
 /frontend/node_modules
+
+### GitHub Actions ###
+!.github/
+
