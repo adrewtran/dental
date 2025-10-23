@@ -5,6 +5,14 @@ import edu.miu.cs489.dental.dto.DentistDto;
 import edu.miu.cs489.dental.exception.ResourceNotFoundException;
 import edu.miu.cs489.dental.model.Dentist;
 import edu.miu.cs489.dental.service.DentistService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +24,18 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/adsweb/api/v1")
+@Tag(name = "Dentists", description = "Dentist management endpoints")
+@SecurityRequirement(name = "bearerAuth")
 public class DentistController {
 
     @Autowired
     private DentistService dentistService;
 
+    @Operation(summary = "Get all dentists", description = "Retrieve a list of all dentists")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved list of dentists",
+                    content = @Content(schema = @Schema(implementation = DentistDto.class)))
+    })
     @GetMapping("/dentists")
     @PreAuthorize("hasAnyAuthority('ROLE_USER','ROLE_OFFICE_MANAGER')")
     public List<DentistDto> getAllDentists() {
@@ -35,9 +50,16 @@ public class DentistController {
         }).collect(Collectors.toList());
     }
 
+    @Operation(summary = "Get dentist by ID", description = "Retrieve a specific dentist by their ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved dentist",
+                    content = @Content(schema = @Schema(implementation = DentistDto.class))),
+            @ApiResponse(responseCode = "404", description = "Dentist not found", content = @Content)
+    })
     @GetMapping("/dentists/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_USER','ROLE_OFFICE_MANAGER')")
-    public ResponseEntity<DentistDto> getDentistById(@PathVariable Long id) {
+    public ResponseEntity<DentistDto> getDentistById(
+            @Parameter(description = "Dentist ID", required = true) @PathVariable Long id) {
         Dentist dentist = dentistService.getDentistById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Dentist not found with id: " + id));
 
@@ -50,6 +72,12 @@ public class DentistController {
         return ResponseEntity.ok(dto);
     }
 
+    @Operation(summary = "Create new dentist", description = "Create a new dentist record (requires OFFICE_MANAGER role)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Dentist successfully created",
+                    content = @Content(schema = @Schema(implementation = DentistDto.class))),
+            @ApiResponse(responseCode = "403", description = "Forbidden - requires OFFICE_MANAGER role", content = @Content)
+    })
     @PostMapping("/dentists")
     @PreAuthorize("hasAuthority('ROLE_OFFICE_MANAGER')")
     public ResponseEntity<DentistDto> createDentist(@RequestBody Dentist dentist) {
@@ -63,9 +91,18 @@ public class DentistController {
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
+    @Operation(summary = "Update dentist", description = "Update an existing dentist record (requires OFFICE_MANAGER role)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Dentist successfully updated",
+                    content = @Content(schema = @Schema(implementation = DentistDto.class))),
+            @ApiResponse(responseCode = "404", description = "Dentist not found", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden - requires OFFICE_MANAGER role", content = @Content)
+    })
     @PutMapping("/dentist/{id}")
     @PreAuthorize("hasAuthority('ROLE_OFFICE_MANAGER')")
-    public ResponseEntity<DentistDto> updateDentist(@PathVariable Long id, @RequestBody Dentist dentistDetails) {
+    public ResponseEntity<DentistDto> updateDentist(
+            @Parameter(description = "Dentist ID", required = true) @PathVariable Long id,
+            @RequestBody Dentist dentistDetails) {
         Dentist updated = dentistService.updateDentist(id, dentistDetails);
         AddressSimpleDto addr = null;
         if (updated.getAddress() != null) {
@@ -76,9 +113,16 @@ public class DentistController {
         return ResponseEntity.ok(dto);
     }
 
+    @Operation(summary = "Delete dentist", description = "Delete a dentist record (requires OFFICE_MANAGER role)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Dentist successfully deleted"),
+            @ApiResponse(responseCode = "404", description = "Dentist not found", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden - requires OFFICE_MANAGER role", content = @Content)
+    })
     @DeleteMapping("/dentist/{id}")
     @PreAuthorize("hasAuthority('ROLE_OFFICE_MANAGER')")
-    public ResponseEntity<Void> deleteDentist(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteDentist(
+            @Parameter(description = "Dentist ID", required = true) @PathVariable Long id) {
         dentistService.deleteDentist(id);
         return ResponseEntity.noContent().build();
     }
