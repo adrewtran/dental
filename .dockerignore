@@ -1,0 +1,8 @@
+target/
+.mvn/
+.git/
+.gitignore
+Dockerfile
+README.md
+README_GKE.md
+

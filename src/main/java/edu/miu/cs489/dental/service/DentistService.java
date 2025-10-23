@@ -27,7 +27,8 @@ public class DentistService {
     }
 
     public Dentist updateDentist(Long id, Dentist dentistDetails) {
-        Dentist dentist = dentistRepository.findById(id).orElseThrow(() -> new RuntimeException("Dentist not found"));
+        Dentist dentist = dentistRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Dentist not found with id: " + id));
         dentist.setDentistName(dentistDetails.getDentistName());
         dentist.setAddress(dentistDetails.getAddress());
         return dentistRepository.save(dentist);
@@ -36,4 +37,9 @@ public class DentistService {
     public void deleteDentist(Long id) {
         dentistRepository.deleteById(id);
     }
+
+    public List<Dentist> searchDentists(String searchString) {
+        return dentistRepository.findByDentistNameContainingIgnoreCase(searchString);
+    }
 }
+

@@ -1,0 +1,184 @@
+.addresses-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.addresses-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.addresses-table-container {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  overflow-x: auto;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.addresses-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+.addresses-table thead {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.addresses-table th {
+  padding: 16px;
+  text-align: left;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.addresses-table th:first-child {
+  border-top-left-radius: 10px;
+}
+
+.addresses-table th:last-child {
+  border-top-right-radius: 10px;
+}
+
+.addresses-table tbody tr {
+  border-bottom: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.addresses-table tbody tr:hover {
+  background: #f7fafc;
+  transform: scale(1.01);
+}
+
+.addresses-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.addresses-table td {
+  padding: 16px;
+  color: #2d3748;
+  font-size: 14px;
+}
+
+.cell-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.city-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.patient-info-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.patient-no {
+  display: inline-block;
+  padding: 4px 10px;
+  background: #e6f0ff;
+  color: #667eea;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.no-patient {
+  color: #cbd5e0;
+  font-style: italic;
+}
+
+.summary-section {
+  display: flex;
+  justify-content: center;
+}
+
+.summary-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 30px 50px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.summary-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.summary-content {
+  text-align: left;
+}
+
+.summary-number {
+  font-size: 36px;
+  font-weight: 700;
+  color: #2d3748;
+  line-height: 1;
+}
+
+.summary-label {
+  font-size: 14px;
+  color: #718096;
+  margin-top: 5px;
+}
+
+@media (max-width: 768px) {
+  .addresses-table-container {
+    padding: 20px;
+  }
+
+  .addresses-table th,
+  .addresses-table td {
+    padding: 12px 8px;
+    font-size: 13px;
+  }
+
+  .summary-card {
+    padding: 20px 30px;
+  }
+
+  .summary-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .summary-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .summary-number {
+    font-size: 28px;
+  }
+}
+

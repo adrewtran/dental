@@ -1,5 +1,6 @@
 package edu.miu.cs489.dental.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,5 +24,6 @@ public class Surgery {
     private Address address;
 
     @OneToMany(mappedBy = "surgery")
+    @JsonIgnore
     private List<Appointment> appointments;
 }
