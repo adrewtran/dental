@@ -15,7 +15,7 @@ public class AppointmentService {
     private AppointmentRepository appointmentRepository;
 
     public List<Appointment> getAllAppointments() {
-        return appointmentRepository.findAll();
+        return appointmentRepository.findAllByOrderByAppointmentDateTimeAsc();
     }
 
     public Optional<Appointment> getAppointmentById(Long id) {
@@ -27,7 +27,8 @@ public class AppointmentService {
     }
 
     public Appointment updateAppointment(Long id, Appointment appointmentDetails) {
-        Appointment appointment = appointmentRepository.findById(id).orElseThrow(() -> new RuntimeException("Appointment not found"));
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Appointment not found with id: " + id));
         appointment.setAppointmentDateTime(appointmentDetails.getAppointmentDateTime());
         appointment.setPatient(appointmentDetails.getPatient());
         appointment.setDentist(appointmentDetails.getDentist());
@@ -39,3 +40,4 @@ public class AppointmentService {
         appointmentRepository.deleteById(id);
     }
 }
+

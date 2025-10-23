@@ -21,19 +21,5 @@ public class SurgeryService {
     public Optional<Surgery> getSurgeryById(Long id) {
         return surgeryRepository.findById(id);
     }
-
-    public Surgery createSurgery(Surgery surgery) {
-        return surgeryRepository.save(surgery);
-    }
-
-    public Surgery updateSurgery(Long id, Surgery surgeryDetails) {
-        Surgery surgery = surgeryRepository.findById(id).orElseThrow(() -> new RuntimeException("Surgery not found"));
-        surgery.setSurgeryNo(surgeryDetails.getSurgeryNo());
-        surgery.setAddress(surgeryDetails.getAddress());
-        return surgeryRepository.save(surgery);
-    }
-
-    public void deleteSurgery(Long id) {
-        surgeryRepository.deleteById(id);
-    }
 }
+

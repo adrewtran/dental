@@ -16,6 +16,7 @@ import edu.miu.cs489.dental.repository.SurgeryRepository;
 import edu.miu.cs489.dental.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -38,8 +39,19 @@ public class DataInitializer implements CommandLineRunner {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public void run(String... args) throws Exception {
+        // Check if data already exists to prevent duplicate insertion
+        if (userRepository.findByUsername("admin").isPresent()) {
+            System.out.println("Data already initialized. Skipping data initialization.");
+            return;
+        }
+
+        System.out.println("Initializing database with sample data...");
+
         // Create Addresses
         Address addr1 = new Address();
         addr1.setStreet("123 Main St");
@@ -104,15 +116,20 @@ public class DataInitializer implements CommandLineRunner {
         appointmentRepository.save(a2);
 
         // Create Roles
-        Role r1 = new Role();
-        r1.setRoleName("Office Manager");
-        roleRepository.save(r1);
+        String roleName = "ROLE_OFFICE_MANAGER";
+        Role role = roleRepository.findByRoleName(roleName).orElseGet(() -> {
+            Role r = new Role();
+            r.setRoleName(roleName);
+            return roleRepository.save(r);
+        });
 
         // Create Users
         User u1 = new User();
         u1.setUsername("admin");
-        u1.setPassword("password");
-        u1.setRole(r1);
+        u1.setPassword(passwordEncoder.encode("password"));
+        u1.setRole(role);
         userRepository.save(u1);
+
+        System.out.println("Database initialization completed successfully!");
     }
 }

@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class Patient {
     private String name;
 
     @OneToOne
+    @JsonIgnore // prevent serializing the address when a Patient is serialized to avoid cycles
     private Address address;
 
     @OneToMany(mappedBy = "patient")
